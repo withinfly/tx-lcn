@@ -152,6 +152,10 @@ public class TransactionControlTemplate {
         } catch (RpcException e) {
             dtxExceptionHandler.handleNotifyGroupMessageException(Arrays.asList(groupId, state, unitId, transactionType), e);
         } catch (LcnBusinessException e) {
+            // Notes In 2019/11/5 11:09 By withinfly(45度C)
+            // 解决连接超时时，抛出空指针异常（java.lang.NullPointerException）
+            Throwable cause = e.getCause();
+            if (null == cause) cause = e;
             // 关闭事务组失败
             dtxExceptionHandler.handleNotifyGroupBusinessException(Arrays.asList(groupId, state, unitId, transactionType), e.getCause());
         }
